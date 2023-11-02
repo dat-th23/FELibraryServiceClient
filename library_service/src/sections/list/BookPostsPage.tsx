@@ -21,170 +21,180 @@ import FormProvider from '../../components/hook-form';
 import CustomBreadcrumbs from '../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../components/settings';
 // sections
-import { BooksBread, BookSearch, BookCards, BookFilter, BookLists, BookSort, BookTagFiltered } from './books';
+import {
+  BooksBread,
+  BookSearch,
+  BookCards,
+  BookFilter,
+  BookLists,
+  BookSort,
+  BookTagFiltered,
+} from './books';
 import CartWidget from '../@dashboard/e-commerce/CartWidget';
 import axios from 'axios';
-
-
 
 // ----------------------------------------------------------------------
 const axiosInstance = process.env.REACT_APP_HOST_API_KEY;
 export default function BookPostsPage() {
-    const { themeStretch } = useSettingsContext();
-    const { id } = useParams()
-    const [books, setBooks] = useState([])
-    const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch();
-    const [filteredList, setFilteredList] = useState<any | undefined>(books);
-    useEffect(() => {
-        const getAPIData = async () => {
-            setLoading(true)
-            try {
-                const apiResponse = await axios.get(`http://localhost:8080/api/books/category/${id ? id : 1}`, {
-                    headers: {
-                        //     "Access-Control-Allow-Origin": "*",
-                        //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-                    }
-                })
-                setBooks(apiResponse.data)
-                setFilteredList(apiResponse.data)
-            } catch (error) {
-                console.log('error', error)
-            }
-        };
-        getAPIData()
-        setLoading(false)
-    }, [id])
+  const { themeStretch } = useSettingsContext();
+  const { id } = useParams();
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [filteredList, setFilteredList] = useState<any | undefined>(books);
+  useEffect(() => {
+    const getAPIData = async () => {
+      setLoading(true);
+      try {
+        const apiUrl = id
+          ? `http://localhost:8080/api/books/category/${id}`
+          : `http://localhost:8080/api/books`;
 
-    const filterBySearch = (event: any) => {
-        // Access input value
-        const query = event.target.value;
-        // Create copy of item list
-        var updatedList = [...books];
-        // Include all elements which includes the search query
-        updatedList = updatedList.filter((item: any) => {
-            return item?.detail.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-        });
-        // Trigger render with updated values
-        setFilteredList(updatedList);
+        // const apiResponse = await axios.get(`http://localhost:8080/api/books/category/${id ? id : 1}`, {
+        const apiResponse = await axios.get(
+            apiUrl,
+          {
+            headers: {
+              //     "Access-Control-Allow-Origin": "*",
+              //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+            },
+          }
+        );
+        setBooks(apiResponse.data);
+        setFilteredList(apiResponse.data);
+      } catch (error) {
+        console.log('error', error);
+      }
     };
+    getAPIData();
+    setLoading(false);
+  }, [id]);
 
-    const [openFilter, setOpenFilter] = useState(false);
-
-    const defaultValues = {
-        sortBy: 'featured',
-    };
-
-    const methods = useForm<IProductFilter>({
-        defaultValues,
+  const filterBySearch = (event: any) => {
+    // Access input value
+    const query = event.target.value;
+    // Create copy of item list
+    var updatedList = [...books];
+    // Include all elements which includes the search query
+    updatedList = updatedList.filter((item: any) => {
+      return item?.detail.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
+    // Trigger render with updated values
+    setFilteredList(updatedList);
+  };
 
-    const {
-        reset,
-        watch,
-        formState: { dirtyFields },
-    } = methods;
+  const [openFilter, setOpenFilter] = useState(false);
 
-    const isDefault =
-        (!dirtyFields.gender &&
-            !dirtyFields.category &&
-            !dirtyFields.colors &&
-            !dirtyFields.priceRange &&
-            !dirtyFields.rating) ||
-        false;
+  const defaultValues = {
+    sortBy: 'featured',
+  };
 
-    const values = watch();
+  const methods = useForm<IProductFilter>({
+    defaultValues,
+  });
 
-    const dataFiltered = applyFilter(filteredList, values);
+  const {
+    reset,
+    watch,
+    formState: { dirtyFields },
+  } = methods;
 
-    useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
+  const isDefault =
+    (!dirtyFields.gender &&
+      !dirtyFields.category &&
+      !dirtyFields.colors &&
+      !dirtyFields.priceRange &&
+      !dirtyFields.rating) ||
+    false;
 
-    const handleResetFilter = () => {
-        reset();
-    };
+  const values = watch();
 
-    const handleOpenFilter = () => {
-        setOpenFilter(true);
-    };
+  const dataFiltered = applyFilter(filteredList, values);
 
-    const handleCloseFilter = () => {
-        setOpenFilter(false);
-    };
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
-    return (
-        <>
+  const handleResetFilter = () => {
+    reset();
+  };
 
-            <FormProvider methods={methods}>
-                <Container maxWidth={themeStretch ? false : 'lg'}>
-                    <BooksBread />
+  const handleOpenFilter = () => {
+    setOpenFilter(true);
+  };
 
-                    <Stack
-                        spacing={2}
-                        direction={{ xs: 'column', sm: 'row' }}
-                        alignItems={{ sm: 'center' }}
-                        justifyContent="space-between"
-                        sx={{ mb: 2 }}
-                    >
-                        <Stack>
-                            <TextField
-                                id="filled-search"
-                                label="Tìm kiếm sách"
-                                type="search"
-                                variant="filled"
-                                onChange={filterBySearch} />
-                        </Stack>
-                        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
 
+  return (
+    <>
+      <FormProvider methods={methods}>
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <BooksBread />
 
-                            <BookSort />
-                        </Stack>
-                    </Stack>
+          <Stack
+            spacing={2}
+            direction={{ xs: 'column', sm: 'row' }}
+            alignItems={{ sm: 'center' }}
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
+            <Stack>
+              <TextField
+                id="filled-search"
+                label="Tìm kiếm sách"
+                type="search"
+                variant="filled"
+                onChange={filterBySearch}
+              />
+            </Stack>
+            <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+              <BookSort />
+            </Stack>
+          </Stack>
 
-                    <Stack sx={{ mb: 3 }}>
-                        {!isDefault && (
-                            <>
-                                <Typography variant="body2" gutterBottom>
-                                    <strong>{dataFiltered.length}</strong>
-                                    &nbsp;Products found
-                                </Typography>
+          <Stack sx={{ mb: 3 }}>
+            {!isDefault && (
+              <>
+                <Typography variant="body2" gutterBottom>
+                  <strong>{dataFiltered.length}</strong>
+                  &nbsp;Products found
+                </Typography>
 
-                                <BookTagFiltered isFiltered={!isDefault} onResetFilter={handleResetFilter} />
-                            </>
-                        )}
-                    </Stack>
+                <BookTagFiltered isFiltered={!isDefault} onResetFilter={handleResetFilter} />
+              </>
+            )}
+          </Stack>
 
-                    <BookLists products={dataFiltered} loading={!books.length && isDefault} />
-
-                </Container>
-            </FormProvider>
-        </>
-    );
+          <BookLists products={dataFiltered} loading={!books.length && isDefault} />
+        </Container>
+      </FormProvider>
+    </>
+  );
 }
 
 // ----------------------------------------------------------------------
 
 function applyFilter(products: IBook[], filters: IProductFilter) {
-    const { gender, category, colors, priceRange, rating, sortBy } = filters;
+  const { gender, category, colors, priceRange, rating, sortBy } = filters;
 
+  // SORT BY
+  if (sortBy === 'priceDesc') {
+    products = orderBy(products, ['price'], ['desc']);
+  }
 
-    // SORT BY
-    if (sortBy === 'priceDesc') {
-        products = orderBy(products, ['price'], ['desc']);
-    }
+  if (sortBy === 'priceAsc') {
+    products = orderBy(products, ['price'], ['asc']);
+  }
 
-    if (sortBy === 'priceAsc') {
-        products = orderBy(products, ['price'], ['asc']);
-    }
+  if (sortBy === 'price_borrowDesc') {
+    products = orderBy(products, ['borrow_price'], ['asc']);
+  }
 
-    if (sortBy === 'price_borrowDesc') {
-        products = orderBy(products, ['borrow_price'], ['asc']);
-    }
+  if (sortBy === 'price_borrowAsc') {
+    products = orderBy(products, ['borrow_price'], ['desc']);
+  }
 
-    if (sortBy === 'price_borrowAsc') {
-        products = orderBy(products, ['borrow_price'], ['desc']);
-    }
-
-    return products;
+  return products;
 }
