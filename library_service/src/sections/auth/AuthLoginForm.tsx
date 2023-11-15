@@ -54,13 +54,13 @@ export default function AuthLoginForm() {
     try {
       await login(data.username, data.password);
     } catch (error) {
-      console.error(error);
+      console.log(error);
 
       reset();
 
       setError('afterSubmit', {
         ...error,
-        message: error.message,
+        message: error,
       });
     }
   };

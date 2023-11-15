@@ -78,7 +78,7 @@ export default function AccountGeneral() {
 
     const onSubmit = async (data: FormValuesProps) => {
         try {
-            await axios.put("http://localhost:8080/api/user/update-profile", {
+            await axios.post("http://localhost:8080/api/user/update-profile", {
                 name: data.name,
                 username: data.username,
                 email: data.email,
@@ -87,8 +87,8 @@ export default function AccountGeneral() {
             }, {
                 headers: {
                     Authorization: "Bearer " + token,
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+                    // "Access-Control-Allow-Origin": "*",
+                    // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
 
                 }
             });
