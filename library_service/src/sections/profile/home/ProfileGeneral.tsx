@@ -87,8 +87,10 @@ export default function AccountGeneral() {
             }, {
                 headers: {
                     Authorization: "Bearer " + token,
+
                     // "Access-Control-Allow-Origin": "*",
                     // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+
 
                 }
             });
