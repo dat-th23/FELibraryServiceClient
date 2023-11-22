@@ -14,6 +14,7 @@ import { useSettingsContext } from '../../../components/settings';
 // sections
 import HomeBookList from './HomeBookList';
 import { IBook } from '../../../@types/books';
+import { da } from 'date-fns/locale';
 // ----------------------------------------------------------------------
 interface Props extends BoxProps {
     data: IBook[]
@@ -60,6 +61,7 @@ export default function EcommerceShopPage({ data }: Props) {
 
     useEffect(() => {
         dispatch(getProducts());
+        console.log(data)
     }, [dispatch]);
 
     const handleResetFilter = () => {

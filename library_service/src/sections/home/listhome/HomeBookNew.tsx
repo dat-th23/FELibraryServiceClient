@@ -88,6 +88,7 @@ export default function BookingNewestBooking({ title, subheader, list, sx, ...ot
             />
 
             <Carousel ref={carouselRef} {...carouselSettings}>
+                
                 {list.map((item) => (
                     <BookingItem key={item.id} item={item} />
                 ))}
@@ -102,7 +103,7 @@ type BookingItemProps = {
     item: IBook;
 };
 
-function BookingItem({ item }: BookingItemProps) {
+function   BookingItem({ item }: BookingItemProps) {
     const { id, amount, author, borrowPrice, category, detail, language, price, publisher, status, subject, title,
         thumbnail } = item;
     const linkTo = PATH_PAGE.bookdetail(id);
@@ -146,14 +147,8 @@ function BookingItem({ item }: BookingItemProps) {
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                         <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
-                            <Box component="span">{fCurrency(price)}đ -</Box>
-                            {borrowPrice && (
-                                <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-                                    {fCurrency(borrowPrice)}đ
-                                </Box>
-                            )}
-
-
+                            <Box component="span">{fCurrency(price)}đ </Box>
+                          
                         </Stack>
                     </Stack>
                 </Stack>

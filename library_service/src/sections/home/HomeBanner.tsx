@@ -64,28 +64,7 @@ export default function FaqsCategory() {
     }
 
     return (
-        <StyledRoot>
-            <Container>
-                <Box
-                    component={MotionViewport}
-                    gap={2.5}
-                    display="grid"
-                    gridTemplateColumns={{
-                        md: 'repeat(2, 1fr)',
-                        lg: 'repeat(2, 1fr)',
-                    }}
-                    sx={{ mb: 10, paddingTop: 2.5, paddingBottom: 1 }}
-                >
-
-                    {CATEGORIES.map((category) => (
-                        <m.div key={category.label} variants={varFade().in}>
-                            <CardDesktop category={category} />
-                        </m.div>
-                    ))}
-
-                </Box>
-            </Container>
-        </StyledRoot>
+        <></>
     );
 }
 
@@ -103,18 +82,7 @@ function CardDesktop({ category }: CardProps) {
 
     return (
         <Stack component={m.div} variants={varFade().inUp} alignItems="center">
-            <m.div
-                animate={{
-                    y: [-10, 0, -10],
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-            >
-                <Image
-                    disabledEffect
-                    alt={icon}
-                    src={icon}
-                />
-            </m.div>
+
         </Stack>
     );
 }

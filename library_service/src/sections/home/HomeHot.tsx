@@ -19,13 +19,13 @@ export default function AboutTeam() {
 
     useEffect(() => {
         const data = async () => {
-            const res = await axios.get('http://localhost:8080/api/books/best-seller/top?topNumber=5', {
+            const res = await axios.get('http://localhost:8080/api/books?page=0&size=5', {
                 // headers: {
                 //     "Access-Control-Allow-Origin": "*",
                 //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
                 // }
             });
-            setBookSuccess(res.data)
+            setBookSuccess(res.data.content)
         }
         data();
     }, [])
@@ -39,7 +39,7 @@ export default function AboutTeam() {
             <m.div variants={varFade().inUp}>
                 <Typography variant="h3" sx={{ my: 3 }}>
                     TOP SẢN PHẨM ĐƯỢC THUÊ NHIỀU NHẤT <br />
-                    2021
+                    2022
                 </Typography>
             </m.div>
 
@@ -52,8 +52,8 @@ export default function AboutTeam() {
                         pb: 5
                     }}
                 >
-                    Sau đây là danh sách các sản phẩm được các độc giả thuê nhiều nhất trong năm 2021,
-                    đa dạng ở nhiều loại sách và người đọc.
+                    Sau đây là danh sách các sản phẩm được các độc giả thuê nhiều nhất trong năm 2022,
+                    đa dạng ở nhiều loại sách và người đọc. 
                 </Typography>
             </m.div>
 

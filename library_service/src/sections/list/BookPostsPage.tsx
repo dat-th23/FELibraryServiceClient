@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
@@ -40,6 +40,8 @@ export default function BookPostsPage() {
   const { id } = useParams();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pageCount, setPageCount] = useState(5);
+  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
   const [filteredList, setFilteredList] = useState<any | undefined>(books);
   useEffect(() => {
@@ -48,11 +50,11 @@ export default function BookPostsPage() {
       try {
         const apiUrl = id
           ? `http://localhost:8080/api/books/category/${id}`
-          : `http://localhost:8080/api/books`;
+          : `http://localhost:8080/api/books?page=0&size=9`;
 
         // const apiResponse = await axios.get(`http://localhost:8080/api/books/category/${id ? id : 1}`, {
         const apiResponse = await axios.get(
-            apiUrl,
+          apiUrl,
           {
             headers: {
               //     "Access-Control-Allow-Origin": "*",
@@ -60,8 +62,10 @@ export default function BookPostsPage() {
             },
           }
         );
-        setBooks(apiResponse.data);
-        setFilteredList(apiResponse.data);
+        console.log(apiResponse.data)
+        setBooks(apiResponse.data.content);
+        setFilteredList(apiResponse.data.content);
+        setPageCount(apiResponse.data.totalPages)
       } catch (error) {
         console.log('error', error);
       }
@@ -127,6 +131,41 @@ export default function BookPostsPage() {
     setOpenFilter(false);
   };
 
+  const handleOnPageChange = (e: any, p: any) => {
+
+    if (p - 1 !== page) {
+      setPage(p - 1)
+      const getAPIData = async () => {
+        setLoading(true);
+        try {
+          const apiUrl = id
+            ? `http://localhost:8080/api/books/category/${id}`
+            : `http://localhost:8080/api/books?page=${p - 1}&size=9`;
+
+          // const apiResponse = await axios.get(`http://localhost:8080/api/books/category/${id ? id : 1}`, {
+          const apiResponse = await axios.get(
+            apiUrl,
+            {
+              headers: {
+                //     "Access-Control-Allow-Origin": "*",
+                //     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+              },
+            }
+          );
+          console.log(apiResponse.data.content)
+          setBooks(apiResponse.data.content);
+          setFilteredList(apiResponse.data.content);
+          setPageCount(apiResponse.data.totalPages)
+        } catch (error) {
+          console.log('error', error);
+        }
+      }
+
+      getAPIData()
+    }
+
+  }
+
   return (
     <>
       <FormProvider methods={methods}>
@@ -143,7 +182,7 @@ export default function BookPostsPage() {
             <Stack>
               <TextField
                 id="filled-search"
-                label="Tìm kiếm sách"
+                label="Tìm kiếm sác"
                 type="search"
                 variant="filled"
                 onChange={filterBySearch}
@@ -167,7 +206,7 @@ export default function BookPostsPage() {
             )}
           </Stack>
 
-          <BookLists products={dataFiltered} loading={!books.length && isDefault} />
+          <BookLists products={dataFiltered} loading={!books.length && isDefault} onPageChange={handleOnPageChange} pageCount={pageCount} />
         </Container>
       </FormProvider>
     </>

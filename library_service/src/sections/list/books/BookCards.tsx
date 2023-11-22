@@ -68,14 +68,7 @@ export default function ShopProductCard({ product }: Props) {
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
 
                     <Stack direction="row" spacing={0.5} sx={{ typography: 'subtitle1' }}>
-                        <Box component="span">{fCurrency(price)}đ -</Box>
-                        {borrowPrice && (
-                            <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
-                                {fCurrency(borrowPrice)}đ
-                            </Box>
-                        )}
-
-
+                        <Box component="span">{fCurrency(price)}đ</Box>
                     </Stack>
                 </Stack>
             </Stack>

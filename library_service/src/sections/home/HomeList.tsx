@@ -22,39 +22,14 @@ export default function HomeList() {
                     // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
                 }
             });
-            setBookSuccess(res.data)
+            console.log(res.data.content)
+            setBookSuccess(res.data.content)
         }
         data();
     }, [])
     return (
         <>
-            <Container component={MotionViewport} sx={{ pb: 10, textAlign: 'center' }}>
-                <Typography variant="h3" sx={{ my: 2 }}>
-                    SẢN PHẨM HOT
-                </Typography>
-                <Typography
-                    sx={{
-                        mx: 'auto',
-                        maxWidth: 640,
-                        color: 'text.secondary',
-                    }}
-                >
-                    Sau đây là danh sách các sản phẩm được các độc giả thuê nhiều nhất trong năm 2021,
-                    đa dạng ở nhiều loại sách và người đọc.
-                </Typography>
-
-                <Box sx={{
-                    pt: 3,
-                    pb: 5,
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}>
-                </Box>
-
-
-                <HomLists data={bookSuccess} />
-            </Container>
-
+            
         </>
     );
 }
